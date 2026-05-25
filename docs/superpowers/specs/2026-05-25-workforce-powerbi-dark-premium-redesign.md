@@ -139,6 +139,7 @@ Content:
 - `Headcount`
 - `Attrition Rate`
 - `High Risk Employees`
+- `High Risk Rate`
 - `Average Tenure`
 - `Estimated Replacement Cost Total`
 - `External Pressure Score`
@@ -149,12 +150,14 @@ Visual grid:
 - `Risk Band Distribution`
 - `Retention Priority by Department`
 - `External Pressure by Occupation Group`
+- `Risk vs Cost Exposure by Department`
 
 Recommended composition:
 
 - filter rail on the left or as a vertical anchored block
 - KPI band across the top-right content area
 - charts in a balanced `2x2` grid
+- one diagnostic visual below the main grid or in a second analytical row
 
 #### Page 2: Attrition Risk
 
@@ -168,6 +171,8 @@ Content:
 - `Average Monthly Base Pay`
 - `Average Risk Score`
 - `Overtime Rate`
+- `Training Participation Rate`
+- `Stalled Progression Rate`
 
 Visual grid:
 
@@ -175,12 +180,13 @@ Visual grid:
 - `Risk by Salary Band`
 - `Recommended Actions`
 - `Risk by Job Role`
+- `Department x Risk Band Heatmap`
 
 Recommended composition:
 
 - KPI strip at top
 - two medium charts in the upper grid
-- one table and one larger chart below
+- one table, one larger chart, and one compact diagnostic matrix below
 
 The table should feel like a report panel, not a spreadsheet block.
 
@@ -196,6 +202,8 @@ Content:
 - `Wage Index`
 - `Labor Demand Index`
 - `External Pressure Score`
+- `Average Monthly Base Pay by Department`
+- `Replacement Cost Exposure by Department`
 
 Visual grid:
 
@@ -225,6 +233,65 @@ Recommended spacing logic:
 - large gap between page sections
 - medium gap between panel rows
 - smaller internal padding inside chart cards
+
+### Additional Analytical Layer
+
+The current report should not stop at simple ranking bars. To increase analytical depth without overwhelming the dashboard, the redesign should add a small number of diagnostic elements that support executive interpretation.
+
+#### New measures to support the redesign
+
+- `High Risk Rate = High Risk Employees / Headcount`
+- `Medium Risk Rate = Medium Risk Employees / Headcount`
+- `Training Participation Rate`
+- `Stalled Progression Rate`
+- `Replacement Cost Exposure by Department`
+- `Average Monthly Base Pay by Department`
+
+These measures should only be added if they are directly used in a visual, card, or supporting calculation. The goal is not to inflate the model with unused metrics.
+
+#### New diagnostic visuals
+
+##### 1. Risk vs Cost Exposure by Department
+
+Recommended for `Executive Overview`.
+
+Visual type:
+
+- scatter chart
+
+Encoding:
+
+- X axis: `Average Risk Score`
+- Y axis: `Replacement Cost Exposure by Department`
+- bubble size: `Headcount`
+- bubble color: `External Pressure Score` or `Retention Priority Tier`
+
+Purpose:
+
+This helps separate departments that are:
+
+- low risk and low consequence
+- high risk but low scale
+- high cost and high urgency
+- high pressure and retention-critical
+
+##### 2. Department x Risk Band Heatmap
+
+Recommended for `Attrition Risk`.
+
+Visual type:
+
+- matrix or heatmap-style table with conditional formatting
+
+Encoding:
+
+- rows: `department_name`
+- columns: `risk_band`
+- values: `employee count` or `% of department`
+
+Purpose:
+
+This makes concentration patterns visible without relying only on ordered bars. It should help show whether a department’s issue is broad, concentrated, or skewed toward a specific band.
 
 ### Power BI-Specific Implementation Notes
 
@@ -256,8 +323,10 @@ Implementation should proceed in this order:
 2. fix KPI cards so labels no longer break
 3. group visuals into real chart cards
 4. style filter rail
-5. apply consistent palette across the three pages
-6. refine titles, labels, and subtitles
+5. add the new executive and diagnostic measures actually used by the pages
+6. introduce the scatter and heatmap as the two analytical extras
+7. apply consistent palette across the three pages
+8. refine titles, labels, and subtitles
 
 ### Success Criteria
 
